@@ -45,6 +45,9 @@
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                             </subviews>
+                                            <constraints>
+                                                <constraint firstAttribute="height" constant="69" id="dDI-nM-PjC"/>
+                                            </constraints>
                                         </stackView>
                                         <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="64K-w3-cXR">
                                             <rect key="frame" x="15" y="10" width="65" height="65"/>
@@ -245,11 +248,22 @@
                     <navigationItem key="navigationItem" title="New Place" id="1JE-LP-vOO">
                         <barButtonItem key="leftBarButtonItem" systemItem="cancel" id="hYm-1b-5CT">
                             <connections>
-                                <segue destination="5yO-2r-Yfl" kind="unwind" unwindAction="cancelAction:" id="28q-vg-zpP"/>
+                                <action selector="cancelAction:" destination="LIW-gP-WSO" id="u3T-9i-sPm"/>
                             </connections>
                         </barButtonItem>
-                        <barButtonItem key="rightBarButtonItem" systemItem="save" id="ttV-gO-dbu"/>
+                        <barButtonItem key="rightBarButtonItem" systemItem="save" id="ttV-gO-dbu">
+                            <connections>
+                                <segue destination="5yO-2r-Yfl" kind="unwind" unwindAction="unwindSegue:" id="Vei-tS-U8u"/>
+                            </connections>
+                        </barButtonItem>
                     </navigationItem>
+                    <connections>
+                        <outlet property="placeImage" destination="umi-aa-Aun" id="FGH-ZD-g1y"/>
+                        <outlet property="placeLocation" destination="CR1-7p-bN4" id="Dx4-9X-WKg"/>
+                        <outlet property="placeName" destination="kRS-zz-cmJ" id="ySp-9z-qqD"/>
+                        <outlet property="placeType" destination="VZs-CK-oDk" id="9eG-1B-e9R"/>
+                        <outlet property="saveButton" destination="ttV-gO-dbu" id="Mxa-Za-gZ5"/>
+                    </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="7bm-5H-J9F" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
                 <exit id="5yO-2r-Yfl" userLabel="Exit" sceneMemberID="exit"/>
