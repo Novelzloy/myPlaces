@@ -48,19 +48,36 @@ class MyPlaceTableViewController: UITableViewController {
 
         return cell
     }
+    
+//    MARK: Table veiw delegate
+    
+    override func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+        let place = places[indexPath.row]
+       
+        let deliteAction = UIContextualAction(style: .destructive, title: "Удалить") { (_ , _, _) in
+            
+            StoregeMagager.deliteObject(place)
+            tableView.deleteRows(at: [indexPath], with: .automatic)
+            
+        }
+        let swipe = UISwipeActionsConfiguration(actions: [deliteAction])
+        return swipe
+    } 
 
-
-    /*
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
+    
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
+        if segue.identifier ==  "showDetail" {
+            guard let indexPath = tableView.indexPathForSelectedRow else {return}
+            let place = places[indexPath.row]
+            let newPalaceVC = segue.destination as! NewPlaceViewController
+            newPalaceVC.currenPlace = place
+        }
     }
-    */
+
 
     @IBAction func unwindSegue(_ segue: UIStoryboardSegue){
         guard let newPlaceVC = segue.source as? NewPlaceViewController else { return }
-        newPlaceVC.saveNewPlace()
+        newPlaceVC.savePlace()
         tableView.reloadData()
         
     }
