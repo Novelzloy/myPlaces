@@ -6,26 +6,35 @@
 //
 
 import UIKit
+import Cosmos
 
 class NewPlaceViewController: UITableViewController {
 
     var imageIsChanged = false
-    var currenPlace: Place?
+    var currenPlace: Place!
+    var currenRating: Double = 0.0
     
     @IBOutlet var saveButton: UIBarButtonItem!
-    
     @IBOutlet var placeImage: UIImageView!
     @IBOutlet var placeName: UITextField!
     @IBOutlet var placeLocation: UITextField!
     @IBOutlet var placeType: UITextField!
+    @IBOutlet weak var ratingControl: RatingControll!
+    @IBOutlet weak var cosmosView: CosmosView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        tableView.tableFooterView = UIView()
+        tableView.tableFooterView = UIView(frame: CGRect(x: 0,
+                                                         y: 0,
+                                                         width: tableView.frame.width,
+                                                         height: 1))
         saveButton.isEnabled = false
         placeName.addTarget(self, action: #selector(textFieldChanged), for: .editingChanged)
         setupEditScreen()
+        cosmosView.didTouchCosmos = { rating in
+            self.currenRating = rating
+        }
     }
     
     // MARK: Table view delegate
@@ -81,21 +90,23 @@ class NewPlaceViewController: UITableViewController {
         let newPlace = Place(name: placeName.text!,
                              location: placeLocation.text,
                              imageData: imageData,
-                             type: placeType.text)
-        
+                             type: placeType.text,
+                             rating: currenRating)
+        // редактирования бд
         if currenPlace != nil{
             try! realm.write {
                 currenPlace?.name = newPlace.name
                 currenPlace?.imageData = newPlace.imageData
                 currenPlace?.location = newPlace.location
                 currenPlace?.type = newPlace.type
+                currenPlace?.rating = newPlace.rating
             }
         } else {
             StoregeMagager.saveObject (newPlace)
         }
         
     }
-    
+    //метод вызывается при редактировании ячейки
     private func setupEditScreen(){
         if currenPlace != nil{
             setupNavigatoinBar()
@@ -107,6 +118,7 @@ class NewPlaceViewController: UITableViewController {
             placeName.text = currenPlace?.name
             placeLocation.text = currenPlace?.location
             placeType.text = currenPlace?.type
+            cosmosView.rating = Double(currenPlace.rating)
         }
     }
     private func setupNavigatoinBar(){
