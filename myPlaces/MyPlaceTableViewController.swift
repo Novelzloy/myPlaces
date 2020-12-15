@@ -71,20 +71,22 @@ class MyPlaceTableViewController: UIViewController, UITableViewDataSource, UITab
         return cell
     }
     
-//    MARK: Table veiw delegate
+   // MARK: Table veiw delegate
     
+
     func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
         let place = places[indexPath.row]
-       
-        let deliteAction = UIContextualAction(style: .normal, title: "Удалить") { (_, _, _) in
-            
+
+        let deliteAction = UIContextualAction(style: .destructive, title: "Удалить") { (_, _,  complete) in
+
             StoregeMagager.deliteObject(place)
-            tableView.deleteRows(at: [indexPath], with: .bottom)
-            
+            tableView.deleteRows(at: [indexPath], with: .automatic)
+            complete(true)
+
         }
-        
+
         return UISwipeActionsConfiguration(actions: [deliteAction])
-    } 
+    }
 
  //MARK: Navigaton
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -112,11 +114,11 @@ class MyPlaceTableViewController: UIViewController, UITableViewDataSource, UITab
     @IBAction func sortSelection(_ sender: UISegmentedControl) {
         sorting()
     }
-    
-    
+
+
     @IBAction func reversSotring(_ sender: Any) {
         ascendingSorting.toggle()
-        
+
         if ascendingSorting {
             reversedSortinButton.image = #imageLiteral(resourceName: "AZ")
         } else {
@@ -124,8 +126,8 @@ class MyPlaceTableViewController: UIViewController, UITableViewDataSource, UITab
         }
         sorting()
     }
-    
-    
+
+
     private func sorting(){
         if segmentedControll.selectedSegmentIndex == 0{
             places = places.sorted(byKeyPath: "date", ascending: ascendingSorting)
